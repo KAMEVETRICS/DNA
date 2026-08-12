@@ -99,6 +99,8 @@ h1 em, h2 em { font-family: Georgia, "Times New Roman", serif; font-weight: 400;
 .source-row { width: 100%; display: grid; grid-template-columns: 48px 1fr auto; align-items: center; gap: 13px; padding: 11px; border: 1px solid rgba(255,255,255,.12); background: rgba(255,255,255,.035); text-align: left; cursor: pointer; transition: .2s ease; }
 .source-row:hover { border-color: rgba(255,255,255,.4); transform: translateX(3px); }
 .source-row.active { background: rgba(201,255,105,.09); border-color: rgba(201,255,105,.48); }
+.source-row.connected { cursor: default; background: rgba(142,197,255,.11); border-color: rgba(142,197,255,.65); }
+.source-row.connected:hover { transform: none; }
 .source-mark { display: grid; place-items: center; width: 42px; height: 42px; border-radius: 50%; color: var(--ink); font: 800 10px/1 "Courier New", monospace; }
 .source-name { display: grid; gap: 4px; }
 .source-name b { font-size: 13px; }
@@ -106,6 +108,7 @@ h1 em, h2 em { font-family: Georgia, "Times New Roman", serif; font-weight: 400;
 .source-toggle { display: flex; align-items: center; gap: 9px; text-transform: uppercase; color: rgba(255,255,255,.55); font: 700 8px/1 "Courier New", monospace; }
 .source-toggle i { display: grid; place-items: center; width: 25px; height: 25px; border-radius: 50%; border: 1px solid rgba(255,255,255,.3); font-style: normal; font-size: 13px; }
 .active .source-toggle { color: var(--acid); }.active .source-toggle i { background: var(--acid); color: var(--ink); border-color: var(--acid); }
+.connected .source-toggle { color: var(--blue); }.connected .source-toggle i { background: var(--blue); color: var(--ink); border-color: var(--blue); }
 .vana-connect { margin-top: 14px; padding: 15px; border: 1px solid rgba(142,197,255,.4); background: rgba(142,197,255,.07); }
 .vana-connect-copy { display: flex; justify-content: space-between; gap: 18px; align-items: start; margin-bottom: 12px; }
 .vana-connect-copy span { flex: 0 0 auto; color: var(--blue); font: 700 8px/1 "Courier New", monospace; letter-spacing: .08em; }
