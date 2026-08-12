@@ -60,7 +60,7 @@ function deriveVerifiedArchetype(scores: SpotifyDnaSignal["scores"]) {
 }
 
 export default function Home() {
-  const [selected, setSelected] = useState<string[]>(["chatgpt", "spotify", "github"]);
+  const [selected, setSelected] = useState<string[]>([]);
   const [generated, setGenerated] = useState(false);
   const [copied, setCopied] = useState(false);
   const [verifiedSignal, setVerifiedSignal] = useState<SpotifyDnaSignal | null>(null);
@@ -81,6 +81,7 @@ export default function Home() {
   }, []);
 
   function toggleSource(id: string) {
+    if (id === "spotify" && verifiedSignal) return;
     setGenerated(false);
     setSelected((current) =>
       current.includes(id) ? current.filter((source) => source !== id) : [...current, id],
@@ -200,22 +201,27 @@ export default function Home() {
             <div className="source-panel">
               <div className="panel-top">
                 <span>YOUR SOURCES</span>
-                <span>{selected.length} / {sources.length} SELECTED</span>
+                <span>{verifiedSignal ? "1 CONNECTED" : "0 CONNECTED"} · {selected.length} SELECTED</span>
               </div>
               <div className="source-list">
                 {sources.map((source) => {
                   const active = selected.includes(source.id);
+                  const connected = source.id === "spotify" && verifiedSignal !== null;
                   return (
                     <button
-                      className={`source-row ${active ? "active" : ""}`}
+                      className={`source-row ${active ? "active" : ""} ${connected ? "connected" : ""}`}
                       key={source.id}
                       type="button"
-                      aria-pressed={active}
+                      aria-pressed={active || connected}
+                      disabled={connected}
                       onClick={() => toggleSource(source.id)}
                     >
                       <span className="source-mark" style={{ background: source.color }}>{source.mark}</span>
                       <span className="source-name"><b>{source.name}</b><small>{source.signal}</small></span>
-                      <span className="source-toggle">{active ? "Added" : "Add"}<i>{active ? "✓" : "+"}</i></span>
+                      <span className="source-toggle">
+                        {connected ? "Connected" : active ? "Selected" : "Select"}
+                        <i>{active || connected ? "✓" : "+"}</i>
+                      </span>
                     </button>
                   );
                 })}
