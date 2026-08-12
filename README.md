@@ -8,7 +8,13 @@ DNA turns user-approved data signals into a private, portable identity profile a
 - React 19
 - TypeScript
 - Vercel Node.js 22 runtime
-- Vana SDK integration planned for the live data flow
+- `@opendatalabs/vana-sdk` direct-data flow on Moksha
+
+## Live Vana flow
+
+DNA currently requests `spotify.savedTracks` through Vana. The browser opens Vana's approval page, while DNA's server creates and polls the request, performs the paid read from escrow, and converts the approved payload into aggregate identity scores. Raw track history is not returned to the interface or persisted by DNA.
+
+The API routes bind each request to an HTTP-only browser session and prevent repeat reads after completion. Spotify is the first verified signal; additional sources should use separate approvals because a Vana access request currently targets one source.
 
 ## Local development
 
@@ -50,3 +56,5 @@ VANA_NETWORK=moksha
 ```
 
 Never commit the real private key. Keep `VANA_NETWORK=moksha` until the full approval and paid-read flow passes on testnet.
+
+For an end-to-end test, select **Testnet** in the Vana app, connect and sync Spotify, then click **Connect Spotify with Vana** in DNA and approve the request. A successful result shows a Vana-verified profile and an aggregate-only compute receipt.

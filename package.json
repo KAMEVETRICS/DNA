@@ -13,9 +13,11 @@
     "test": "pnpm run lint && pnpm run build"
   },
   "dependencies": {
+    "@opendatalabs/vana-sdk": "^3.13.4",
     "next": "16.2.12",
     "react": "19.2.6",
-    "react-dom": "19.2.6"
+    "react-dom": "19.2.6",
+    "viem": "^2.55.13"
   },
   "devDependencies": {
     "@eslint/js": "9.39.4",
