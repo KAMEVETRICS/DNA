@@ -12,7 +12,7 @@ export async function generateMetadata(): Promise<Metadata> {
     title: "DNA — Your data has a shape",
     description: "Turn the data you own into a private, portable identity—and discover how you align with the people you choose.",
     metadataBase: new URL(origin),
-    icons: { icon: "/og.png", apple: "/og.png" },
+    icons: { icon: "/logo.png", apple: "/logo.png" },
     openGraph: {
       title: "DNA — Your data has a shape",
       description: "Connect your context. Reveal your pattern. Find your people.",
