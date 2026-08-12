@@ -96,11 +96,20 @@ h1 em, h2 em { font-family: Georgia, "Times New Roman", serif; font-weight: 400;
 .source-panel { border: 1px solid rgba(255,255,255,.2); padding: 22px; }
 .panel-top { display: flex; justify-content: space-between; padding-bottom: 16px; color: rgba(255,255,255,.45); font: 700 9px/1 "Courier New", monospace; letter-spacing: .09em; }
 .source-list { display: grid; gap: 8px; }
-.source-row { width: 100%; display: grid; grid-template-columns: 48px 1fr auto; align-items: center; gap: 13px; padding: 11px; border: 1px solid rgba(255,255,255,.12); background: rgba(255,255,255,.035); text-align: left; cursor: pointer; transition: .2s ease; }
-.source-row:hover { border-color: rgba(255,255,255,.4); transform: translateX(3px); }
+.source-row { width: 100%; display: grid; grid-template-columns: 48px 1fr auto; align-items: center; gap: 13px; padding: 11px; border: 1px solid rgba(255,255,255,.12); background: rgba(255,255,255,.035); text-align: left; transition: .2s ease; }
+.source-row.static { cursor: default; }
+.source-row:not(.static):hover { border-color: rgba(255,255,255,.4); transform: translateX(3px); }
 .source-row.active { background: rgba(201,255,105,.09); border-color: rgba(201,255,105,.48); }
-.source-row.connected { cursor: default; background: rgba(142,197,255,.11); border-color: rgba(142,197,255,.65); }
-.source-row.connected:hover { transform: none; }
+.source-row.connected { background: rgba(142,197,255,.11); border-color: rgba(142,197,255,.65); }
+.source-actions { min-width: 132px; display: flex; justify-content: flex-end; }
+.vana-inline { display: grid; gap: 6px; justify-items: end; max-width: 180px; }
+.vana-inline > button { display: inline-flex; align-items: center; gap: 8px; padding: 9px 11px; border: 1px solid var(--blue); background: var(--blue); color: var(--ink); cursor: pointer; text-transform: uppercase; font: 800 8px/1 "Courier New", monospace; white-space: nowrap; }
+.vana-inline > button:hover:not(:disabled) { background: white; border-color: white; }
+.vana-inline > button:disabled { cursor: wait; opacity: .72; }
+.vana-inline > button i { font-style: normal; font-size: 12px; }
+.vana-inline.vana-done { color: var(--acid); font: 700 8px/1 "Courier New", monospace; text-transform: uppercase; letter-spacing: .06em; }
+.vana-inline > a { color: var(--blue); font: 700 8px/1.3 "Courier New", monospace; text-decoration: underline; text-align: right; }
+.demo-hint { margin: 10px 0 0; color: rgba(255,255,255,.32); font-size: 10px; line-height: 1.45; text-align: center; }
 .source-mark { display: grid; place-items: center; width: 42px; height: 42px; border-radius: 50%; color: var(--ink); font: 800 10px/1 "Courier New", monospace; }
 .source-name { display: grid; gap: 4px; }
 .source-name b { font-size: 13px; }
@@ -109,22 +118,7 @@ h1 em, h2 em { font-family: Georgia, "Times New Roman", serif; font-weight: 400;
 .source-toggle i { display: grid; place-items: center; width: 25px; height: 25px; border-radius: 50%; border: 1px solid rgba(255,255,255,.3); font-style: normal; font-size: 13px; }
 .active .source-toggle { color: var(--acid); }.active .source-toggle i { background: var(--acid); color: var(--ink); border-color: var(--acid); }
 .connected .source-toggle { color: var(--blue); }.connected .source-toggle i { background: var(--blue); color: var(--ink); border-color: var(--blue); }
-.vana-connect { margin-top: 14px; padding: 15px; border: 1px solid rgba(142,197,255,.4); background: rgba(142,197,255,.07); }
-.vana-connect-copy { display: flex; justify-content: space-between; gap: 18px; align-items: start; margin-bottom: 12px; }
-.vana-connect-copy span { flex: 0 0 auto; color: var(--blue); font: 700 8px/1 "Courier New", monospace; letter-spacing: .08em; }
-.vana-connect-copy p { margin: -2px 0 0; max-width: 260px; color: rgba(255,255,255,.5); font-size: 10px; line-height: 1.4; text-align: right; }
-.vana-connect > button { width: 100%; display: flex; justify-content: space-between; align-items: center; padding: 13px 14px; border: 1px solid var(--blue); background: var(--blue); color: var(--ink); cursor: pointer; text-transform: uppercase; font: 800 9px/1 "Courier New", monospace; }
-.vana-connect > button:hover:not(:disabled) { background: white; border-color: white; }
-.vana-connect > button:disabled { cursor: wait; opacity: .72; }
-.vana-connect > button i { font-style: normal; font-size: 14px; }
-.vana-done { border-color: rgba(201,255,105,.55); background: rgba(201,255,105,.08); }
-.vana-done .vana-connect-copy span { color: var(--acid); }
-.vana-done > button { border-color: var(--acid); background: var(--acid); cursor: default; opacity: 1; }
-.vana-error { margin: 10px 0 0; color: #ffae9d; font-size: 10px; line-height: 1.45; }
-.vana-connect > a { display: block; margin-top: 10px; color: var(--blue); font: 700 9px/1.3 "Courier New", monospace; text-decoration: underline; }
-.generate-button { width: 100%; display: flex; align-items: center; justify-content: space-between; margin-top: 14px; padding: 17px 18px; border: 0; background: var(--acid); color: var(--ink); text-transform: uppercase; font: 800 11px/1 "Courier New", monospace; cursor: pointer; transition: .2s ease; }
-.generate-button:hover:not(:disabled) { background: white; }.generate-button:disabled { opacity: .38; cursor: not-allowed; }
-.generate-button span { font-size: 18px; }
+.vana-error { margin: 0; color: #ffae9d; font-size: 9px; line-height: 1.4; text-align: right; max-width: 170px; }
 .demo-note { margin: 15px 0 0; color: rgba(255,255,255,.38); font: 700 8px/1 "Courier New", monospace; text-transform: uppercase; text-align: center; letter-spacing: .06em; }
 .demo-note span { color: var(--coral); margin-right: 5px; }
 .demo-note.verified { color: rgba(201,255,105,.65); }
@@ -207,8 +201,11 @@ h1 em, h2 em { font-family: Georgia, "Times New Roman", serif; font-weight: 400;
   .how, .match { padding-block: 90px; }.builder-wrap, .privacy { padding-block: 82px; }
   .how h2, .builder h2, .match h2, .privacy h2 { font-size: 48px; }
   .builder-heading { margin-bottom: 40px; }.source-panel, .result-card, .compat-card { padding: 18px; }.result-card { min-height: 660px; }
-  .source-row { grid-template-columns: 42px 1fr auto; gap: 9px; padding: 9px; }.source-mark { width: 36px; height: 36px; }.source-toggle { font-size: 0; }
-  .vana-connect-copy { display: grid; gap: 8px; }.vana-connect-copy p { text-align: left; }
+  .source-row { grid-template-columns: 42px 1fr; gap: 9px; padding: 9px; }.source-mark { width: 36px; height: 36px; }.source-toggle { font-size: 0; }
+  .source-actions { grid-column: 1 / -1; justify-content: stretch; min-width: 0; }
+  .vana-inline { max-width: none; justify-items: stretch; }
+  .vana-inline > button { width: 100%; justify-content: space-between; }
+  .vana-error { text-align: left; max-width: none; }
   .share-block { align-items: flex-start; flex-direction: column; }
   .people { grid-template-columns: 1fr 74px 1fr; }.avatar { width: 62px; height: 62px; }.compat-score { width: 74px; height: 74px; }.compat-score span { font-size: 27px; }.compat-score::before, .compat-score::after { width: 23px; top: 36px; }
   .shared-traits > div { grid-template-columns: 1fr; gap: 6px; }
