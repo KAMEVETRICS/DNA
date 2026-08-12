@@ -1,6 +1,9 @@
 "use client";
 
-import { useMemo, useState, type CSSProperties } from "react";
+import { useCallback, useMemo, useState, type CSSProperties } from "react";
+
+import { VanaSpotifyConnect } from "@/app/components/VanaSpotifyConnect";
+import type { SpotifyDnaSignal } from "@/lib/dna-profile";
 
 type Source = {
   id: string;
@@ -45,13 +48,37 @@ function deriveArchetype(selected: string[]) {
   return selected.length > 4 ? "The Pattern Weaver" : "The Curious Catalyst";
 }
 
+function deriveVerifiedArchetype(scores: SpotifyDnaSignal["scores"]) {
+  const strongest = scores.indexOf(Math.max(...scores));
+  return [
+    "The Sonic Cartographer",
+    "The Culture Alchemist",
+    "The Momentum Collector",
+    "The Social Resonator",
+    "The Rhythm Architect",
+  ][strongest];
+}
+
 export default function Home() {
   const [selected, setSelected] = useState<string[]>(["chatgpt", "spotify", "github"]);
   const [generated, setGenerated] = useState(false);
   const [copied, setCopied] = useState(false);
-  const scores = useMemo(() => deriveScores(selected), [selected]);
-  const archetype = deriveArchetype(selected);
+  const [verifiedSignal, setVerifiedSignal] = useState<SpotifyDnaSignal | null>(null);
+  const scores = useMemo(
+    () => verifiedSignal?.scores ?? deriveScores(selected),
+    [selected, verifiedSignal],
+  );
+  const archetype = verifiedSignal
+    ? deriveVerifiedArchetype(verifiedSignal.scores)
+    : deriveArchetype(selected);
   const average = Math.round(scores.reduce((sum, score) => sum + score, 0) / scores.length);
+
+  const handleVanaConnected = useCallback((signal: SpotifyDnaSignal) => {
+    setVerifiedSignal(signal);
+    setSelected((current) => current.includes("spotify") ? current : [...current, "spotify"]);
+    setGenerated(true);
+    window.setTimeout(() => document.querySelector("#result")?.scrollIntoView({ behavior: "smooth" }), 80);
+  }, []);
 
   function toggleSource(id: string) {
     setGenerated(false);
@@ -166,7 +193,7 @@ export default function Home() {
               <div className="section-kicker light">02 / BUILD YOUR DNA</div>
               <h2>Choose your<br /><em>signals.</em></h2>
             </div>
-            <p>Pick at least three sources. This prototype uses representative demo signals; the competition build will request each source through Vana, one permission at a time.</p>
+            <p>Start with Spotify, now live through Vana. DNA turns your approved saved-track signal into aggregate traits; the remaining sources preview the multi-source experience.</p>
           </div>
 
           <div className="builder-grid">
@@ -193,21 +220,39 @@ export default function Home() {
                   );
                 })}
               </div>
+              <VanaSpotifyConnect onConnected={handleVanaConnected} />
               <button className="generate-button" type="button" disabled={selected.length < 3} onClick={revealDNA}>
-                {selected.length < 3 ? `Choose ${3 - selected.length} more` : "Generate my DNA"}
+                {selected.length < 3
+                  ? `Choose ${3 - selected.length} more`
+                  : verifiedSignal
+                    ? "Reveal verified DNA"
+                    : "Preview my DNA"}
                 <span aria-hidden="true">✦</span>
               </button>
-              <p className="demo-note"><span>●</span> Demo mode · No account data is accessed</p>
+              <p className={`demo-note ${verifiedSignal ? "verified" : ""}`}>
+                <span>●</span>{verifiedSignal
+                  ? ` Vana verified · ${verifiedSignal.sampleSize.toLocaleString()} aggregate signals`
+                  : " Preview mode · Connect Spotify for a verified result"}
+              </p>
             </div>
 
             <div className={`result-card ${generated ? "revealed" : ""}`} id="result" aria-live="polite">
               {generated ? (
                 <>
-                  <div className="result-top"><span>DNA / LIVE PROFILE</span><span>{selected.length} SIGNALS</span></div>
+                  <div className="result-top">
+                    <span>DNA / {verifiedSignal ? "VERIFIED PROFILE" : "PREVIEW PROFILE"}</span>
+                    <span>{verifiedSignal ? "VANA · SPOTIFY" : `${selected.length} SIGNALS`}</span>
+                  </div>
                   <div className="result-orb" style={{ "--score": `${average * 3.6}deg` } as CSSProperties}>
                     <div><b>{average}</b><small>signal score</small></div>
                   </div>
-                  <div className="result-title"><span>YOUR ARCHETYPE</span><h3>{archetype}</h3><p>You turn scattered inputs into systems people can use. Curious by instinct, deliberate by design.</p></div>
+                  <div className="result-title">
+                    <span>YOUR ARCHETYPE</span>
+                    <h3>{archetype}</h3>
+                    <p>{verifiedSignal
+                      ? verifiedSignal.evidence[0]
+                      : "You turn scattered inputs into systems people can use. Curious by instinct, deliberate by design."}</p>
+                  </div>
                   <div className="trait-list">
                     {traits.map((trait, index) => (
                       <div className="trait" key={trait}>
@@ -215,6 +260,12 @@ export default function Home() {
                       </div>
                     ))}
                   </div>
+                  {verifiedSignal ? (
+                    <div className="live-evidence">
+                      <span>PRIVATE COMPUTE RECEIPT</span>
+                      <p>{verifiedSignal.evidence[1]} · {verifiedSignal.evidence[2]}</p>
+                    </div>
+                  ) : null}
                   <div className="share-block">
                     <div><span>UNLOCK SOCIAL DNA</span><p>Invite a friend to reveal where you click, clash, and create.</p></div>
                     <button type="button" onClick={copyInvite}>{copied ? "Copied ✓" : "Copy invite ↗"}</button>

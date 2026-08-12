@@ -106,11 +106,26 @@ h1 em, h2 em { font-family: Georgia, "Times New Roman", serif; font-weight: 400;
 .source-toggle { display: flex; align-items: center; gap: 9px; text-transform: uppercase; color: rgba(255,255,255,.55); font: 700 8px/1 "Courier New", monospace; }
 .source-toggle i { display: grid; place-items: center; width: 25px; height: 25px; border-radius: 50%; border: 1px solid rgba(255,255,255,.3); font-style: normal; font-size: 13px; }
 .active .source-toggle { color: var(--acid); }.active .source-toggle i { background: var(--acid); color: var(--ink); border-color: var(--acid); }
+.vana-connect { margin-top: 14px; padding: 15px; border: 1px solid rgba(142,197,255,.4); background: rgba(142,197,255,.07); }
+.vana-connect-copy { display: flex; justify-content: space-between; gap: 18px; align-items: start; margin-bottom: 12px; }
+.vana-connect-copy span { flex: 0 0 auto; color: var(--blue); font: 700 8px/1 "Courier New", monospace; letter-spacing: .08em; }
+.vana-connect-copy p { margin: -2px 0 0; max-width: 260px; color: rgba(255,255,255,.5); font-size: 10px; line-height: 1.4; text-align: right; }
+.vana-connect > button { width: 100%; display: flex; justify-content: space-between; align-items: center; padding: 13px 14px; border: 1px solid var(--blue); background: var(--blue); color: var(--ink); cursor: pointer; text-transform: uppercase; font: 800 9px/1 "Courier New", monospace; }
+.vana-connect > button:hover:not(:disabled) { background: white; border-color: white; }
+.vana-connect > button:disabled { cursor: wait; opacity: .72; }
+.vana-connect > button i { font-style: normal; font-size: 14px; }
+.vana-done { border-color: rgba(201,255,105,.55); background: rgba(201,255,105,.08); }
+.vana-done .vana-connect-copy span { color: var(--acid); }
+.vana-done > button { border-color: var(--acid); background: var(--acid); cursor: default; opacity: 1; }
+.vana-error { margin: 10px 0 0; color: #ffae9d; font-size: 10px; line-height: 1.45; }
+.vana-connect > a { display: block; margin-top: 10px; color: var(--blue); font: 700 9px/1.3 "Courier New", monospace; text-decoration: underline; }
 .generate-button { width: 100%; display: flex; align-items: center; justify-content: space-between; margin-top: 14px; padding: 17px 18px; border: 0; background: var(--acid); color: var(--ink); text-transform: uppercase; font: 800 11px/1 "Courier New", monospace; cursor: pointer; transition: .2s ease; }
 .generate-button:hover:not(:disabled) { background: white; }.generate-button:disabled { opacity: .38; cursor: not-allowed; }
 .generate-button span { font-size: 18px; }
 .demo-note { margin: 15px 0 0; color: rgba(255,255,255,.38); font: 700 8px/1 "Courier New", monospace; text-transform: uppercase; text-align: center; letter-spacing: .06em; }
 .demo-note span { color: var(--coral); margin-right: 5px; }
+.demo-note.verified { color: rgba(201,255,105,.65); }
+.demo-note.verified span { color: var(--acid); }
 
 .result-card { min-height: 670px; border: 1px solid rgba(255,255,255,.2); background: #20201c; padding: 28px; position: relative; overflow: hidden; }
 .result-card::before { content: ""; position: absolute; inset: 0; opacity: .6; background: radial-gradient(circle at 50% 27%, rgba(201,255,105,.13), transparent 27%), repeating-linear-gradient(115deg, transparent 0 35px, rgba(255,255,255,.014) 36px 37px); }
@@ -123,6 +138,9 @@ h1 em, h2 em { font-family: Georgia, "Times New Roman", serif; font-weight: 400;
 .trait-list { display: grid; gap: 9px; margin-top: 26px; }
 .trait { display: grid; grid-template-columns: 82px 1fr 22px; gap: 12px; align-items: center; font: 700 8px/1 "Courier New", monospace; text-transform: uppercase; }
 .trait > span { color: rgba(255,255,255,.6); }.trait > i { height: 2px; background: rgba(255,255,255,.12); }.trait > i b { display: block; height: 100%; background: var(--acid); }.trait > strong { color: var(--acid); }
+.live-evidence { margin-top: 22px; padding: 13px 14px; border: 1px solid rgba(201,255,105,.24); background: rgba(201,255,105,.05); }
+.live-evidence span { color: var(--acid); font: 700 8px/1 "Courier New", monospace; letter-spacing: .08em; }
+.live-evidence p { margin: 7px 0 0; color: rgba(255,255,255,.5); font-size: 9px; line-height: 1.45; }
 .share-block { display: flex; justify-content: space-between; align-items: center; gap: 20px; padding-top: 20px; margin-top: 25px; border-top: 1px solid rgba(255,255,255,.14); }
 .share-block span { font: 700 8px/1 "Courier New", monospace; letter-spacing: .08em; color: var(--coral); }.share-block p { margin: 5px 0 0; max-width: 260px; color: rgba(255,255,255,.52); font-size: 10px; line-height: 1.45; }
 .share-block button { flex: 0 0 auto; border: 1px solid rgba(255,255,255,.35); background: transparent; color: white; padding: 10px 12px; font: 700 8px/1 "Courier New", monospace; text-transform: uppercase; cursor: pointer; }
@@ -161,6 +179,12 @@ h1 em, h2 em { font-family: Georgia, "Times New Roman", serif; font-weight: 400;
 .footer > p { margin: 0; font-size: 12px; line-height: 1.55; color: rgba(22,22,19,.55); }.footer > a { font-size: 12px; font-weight: 700; }
 .footer-bottom { grid-column: 1 / -1; display: flex; justify-content: space-between; margin-top: 54px; padding-top: 18px; border-top: 1px solid var(--line); font: 700 8px/1 "Courier New", monospace; color: rgba(22,22,19,.48); letter-spacing: .05em; }
 
+.return-page { min-height: 100vh; display: grid; place-items: center; padding: 24px; background: var(--ink); color: white; }
+.return-card { width: min(100%, 560px); padding: clamp(32px, 7vw, 70px); border: 1px solid rgba(255,255,255,.2); background: radial-gradient(circle at 80% 10%, rgba(201,255,105,.14), transparent 35%), #20201c; box-shadow: 14px 14px 0 var(--acid); }
+.return-card > span { color: var(--acid); font: 700 9px/1 "Courier New", monospace; letter-spacing: .12em; }
+.return-card h1 { margin: 22px 0 15px; font: 400 clamp(44px, 8vw, 70px)/.95 Georgia, serif; letter-spacing: -.05em; }
+.return-card p { margin: 0; max-width: 390px; color: rgba(255,255,255,.58); font-size: 15px; line-height: 1.6; }
+
 @media (max-width: 900px) {
   .nav-links { display: none; }
   .hero { grid-template-columns: 1fr; padding-top: 70px; }
@@ -181,6 +205,7 @@ h1 em, h2 em { font-family: Georgia, "Times New Roman", serif; font-weight: 400;
   .how h2, .builder h2, .match h2, .privacy h2 { font-size: 48px; }
   .builder-heading { margin-bottom: 40px; }.source-panel, .result-card, .compat-card { padding: 18px; }.result-card { min-height: 660px; }
   .source-row { grid-template-columns: 42px 1fr auto; gap: 9px; padding: 9px; }.source-mark { width: 36px; height: 36px; }.source-toggle { font-size: 0; }
+  .vana-connect-copy { display: grid; gap: 8px; }.vana-connect-copy p { text-align: left; }
   .share-block { align-items: flex-start; flex-direction: column; }
   .people { grid-template-columns: 1fr 74px 1fr; }.avatar { width: 62px; height: 62px; }.compat-score { width: 74px; height: 74px; }.compat-score span { font-size: 27px; }.compat-score::before, .compat-score::after { width: 23px; top: 36px; }
   .shared-traits > div { grid-template-columns: 1fr; gap: 6px; }
