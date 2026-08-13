@@ -92,6 +92,8 @@ h1 em, h2 em { font-family: Georgia, "Times New Roman", serif; font-weight: 400;
 .start-card h2 { margin: 18px 0 10px; font-size: clamp(28px, 3.4vw, 40px); line-height: .95; letter-spacing: -.04em; }
 .start-card > p { margin: 0 0 22px; color: rgba(22,22,19,.64); font-size: 15px; line-height: 1.5; }
 .start-card a { color: inherit; text-decoration: underline; }
+.start-card a.primary-button { color: var(--paper); text-decoration: none; }
+.start-card a.primary-button span { color: var(--acid); }
 .start-help { margin: 14px 0 0; color: rgba(22,22,19,.45); font-size: 12px; line-height: 1.45; }
 .start-done { display: grid; gap: 10px; padding: 16px; border: 1px solid var(--ink); background: var(--acid); }
 .start-done b { font-size: 16px; }
