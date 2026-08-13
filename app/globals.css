@@ -104,6 +104,8 @@ h1 em, h2 em { font-family: Georgia, "Times New Roman", serif; font-weight: 400;
 .source-picker button { display: inline-flex; align-items: center; gap: 7px; padding: 7px 10px 7px 7px; border: 1px solid var(--ink); background: var(--paper); cursor: pointer; font: 800 10px/1 "Courier New", monospace; text-transform: uppercase; }
 .source-picker button i { display: grid; place-items: center; width: 22px; height: 22px; border-radius: 50%; font-style: normal; font-size: 8px; color: var(--ink); }
 .source-picker button.picked { background: var(--ink); color: white; }
+.source-picker button:hover { background: rgba(22,22,19,.08); }
+.source-picker button.picked:hover { background: var(--ink); }
 .picked-blurb { margin: 0 0 16px; color: rgba(22,22,19,.55); font-size: 13px; line-height: 1.45; }
 
 .progress-pills { display: flex; flex-wrap: wrap; gap: 8px; margin: -28px 0 28px; }

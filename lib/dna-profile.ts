@@ -293,20 +293,7 @@ export function fromShareable(share: ShareableDna): DnaProfile {
     archetype: share.a,
     scores: share.s,
     average: share.avg,
-    sources:
-      sources.length > 0
-        ? sources
-        : [
-            {
-              source: "spotify",
-              scope: "shared",
-              sampleSize: 0,
-              scores: share.s,
-              evidence: ["Peer shared a verified DNA profile"],
-              generatedAt: new Date().toISOString(),
-              privacy: "aggregate-only",
-            },
-          ],
+    sources,
     evidence: ["Imported from invite · aggregate-only"],
     generatedAt: new Date().toISOString(),
     privacy: "aggregate-only",

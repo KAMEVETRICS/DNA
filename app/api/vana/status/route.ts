@@ -17,7 +17,7 @@ export async function GET(request: NextRequest) {
   const sourceId =
     request.nextUrl.searchParams.get("source") ??
     request.cookies.get(SOURCE_COOKIE)?.value ??
-    "spotify";
+    "";
 
   if (!requestId || !requestIdPattern.test(requestId)) {
     return NextResponse.json({ error: "Missing or invalid request ID." }, { status: 400 });

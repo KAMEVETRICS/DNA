@@ -37,12 +37,12 @@ export async function POST(request: NextRequest) {
     );
   }
 
-  let sourceId = "spotify";
+  let sourceId = "";
   try {
     const body = (await request.json()) as { source?: string };
     if (body?.source) sourceId = body.source;
   } catch {
-    // Empty body defaults to spotify for backwards compatibility.
+    // Missing body is invalid — a source must be chosen explicitly.
   }
 
   if (!isDnaSourceId(sourceId)) {

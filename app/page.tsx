@@ -57,13 +57,11 @@ export default function Home() {
   const [peerProfile] = useState<DnaProfile | null>(() => loadPeerFromUrl());
   const [copied, setCopied] = useState(false);
   const [busySource, setBusySource] = useState<string | null>(null);
-  const [pickedId, setPickedId] = useState<DnaSourceId>(DNA_SOURCES[0].id);
+  const [pickedId, setPickedId] = useState<DnaSourceId | null>(null);
 
   const connectedCount = Object.keys(signals).length;
   const remainingSources = DNA_SOURCES.filter((source) => !signals[source.id]);
-  const nextSource = remainingSources[0] ?? null;
-  const pickedSource =
-    remainingSources.find((source) => source.id === pickedId) ?? remainingSources[0] ?? DNA_SOURCES[0];
+  const pickedSource = remainingSources.find((source) => source.id === pickedId) ?? null;
   const invitedDone = Boolean(copied);
   const matched = Boolean(profile && peerProfile);
   const compatibility = useMemo(() => {
@@ -74,7 +72,7 @@ export default function Home() {
   const nextAction = !connectedCount
     ? { id: "connect", label: "Connect any source", href: "#start" }
     : remainingSources.length
-      ? { id: "more", label: `Connect ${nextSource?.name ?? "another source"}`, href: "#build" }
+      ? { id: "more", label: "Connect another source", href: "#build" }
       : !matched
         ? { id: "invite", label: "Copy invite link", href: "#invite" }
         : { id: "match", label: "See your match", href: "#match" };
@@ -183,14 +181,14 @@ export default function Home() {
           <p>
             Pick whichever source you already synced in the{" "}
             <a href="https://app.vana.org/sources" target="_blank" rel="noreferrer">Vana app</a>{" "}
-            on <b>Mainnet</b>. Spotify is not required — any listed source scores a first-read.
+            on <b>Mainnet</b>. Any listed source is a real first-read.
           </p>
           {connectedCount ? (
             <div className="start-done">
               <b>{connectedCount} source{connectedCount === 1 ? "" : "s"} verified</b>
               <span>Now connect another source or copy your invite.</span>
               <div className="start-done-actions">
-                {nextSource ? <a className="primary-button" href={`#source-${nextSource.id}`}>Connect {nextSource.name} <span>↓</span></a> : null}
+                {remainingSources.length ? <a className="primary-button" href="#build">Connect another source <span>↓</span></a> : null}
                 <button className="ghost-button" type="button" onClick={copyInvite} disabled={!profile}>
                   {copied ? "Invite copied" : "Copy invite"}
                 </button>
@@ -204,8 +202,8 @@ export default function Home() {
                     key={source.id}
                     type="button"
                     role="radio"
-                    aria-checked={pickedSource.id === source.id}
-                    className={pickedSource.id === source.id ? "picked" : ""}
+                    aria-checked={pickedSource?.id === source.id}
+                    className={pickedSource?.id === source.id ? "picked" : ""}
                     onClick={() => setPickedId(source.id)}
                   >
                     <i style={{ background: source.color }}>{source.mark}</i>
@@ -213,18 +211,24 @@ export default function Home() {
                   </button>
                 ))}
               </div>
-              <p className="picked-blurb">{pickedSource.blurb}</p>
-              <VanaSourceConnect
-                source={pickedSource}
-                connected={false}
-                emphasis="hero"
-                busy={busySource !== null && busySource !== pickedSource.id}
-                onBusyChange={setBusySource}
-                onConnected={handleSourceConnected}
-              />
-              <p className="start-help">
-                Sync that source on Mainnet first. Popup blocked? Use the approval link. Keep this tab open.
-              </p>
+              {pickedSource ? (
+                <>
+                  <p className="picked-blurb">{pickedSource.blurb}</p>
+                  <VanaSourceConnect
+                    source={pickedSource}
+                    connected={false}
+                    emphasis="hero"
+                    busy={busySource !== null && busySource !== pickedSource.id}
+                    onBusyChange={setBusySource}
+                    onConnected={handleSourceConnected}
+                  />
+                  <p className="start-help">
+                    Sync that source on Mainnet first. Popup blocked? Use the approval link. Keep this tab open.
+                  </p>
+                </>
+              ) : (
+                <p className="picked-blurb">Choose the source you already synced. None is preferred.</p>
+              )}
             </>
           )}
         </div>
@@ -263,7 +267,7 @@ export default function Home() {
                 {DNA_SOURCES.map((source) => {
                   const signal = signals[source.id];
                   const connected = Boolean(signal);
-                  const featured = !connected && source.id === (nextSource?.id ?? pickedSource.id);
+                  const featured = Boolean(pickedSource && !connected && source.id === pickedSource.id);
                   return (
                     <div
                       className={`source-row static ${connected ? "connected active" : ""} ${featured ? "featured" : ""}`}
@@ -322,11 +326,11 @@ export default function Home() {
                     <span>{remainingSources.length ? "NEXT ACTION" : "SHARE THIS"}</span>
                     <strong>
                       {remainingSources.length
-                        ? `Connect ${nextSource?.name} — then invite someone.`
+                        ? "Connect another source — then invite someone."
                         : "Copy your invite. The product is not done until someone else opens it."}
                     </strong>
                     <div className="next-callout-actions">
-                      {nextSource ? <a href={`#source-${nextSource.id}`}>Connect {nextSource.name}</a> : null}
+                      {remainingSources.length ? <a href="#build">Connect another source</a> : null}
                       <button type="button" onClick={copyInvite}>{copied ? "Copied ✓ Send it now" : "Copy invite link"}</button>
                     </div>
                   </div>
@@ -361,7 +365,7 @@ export default function Home() {
                   <h3>Nothing happens until you approve a source.</h3>
                   <ol>
                     <li>Open <a href="https://app.vana.org/sources" target="_blank" rel="noreferrer">app.vana.org/sources</a> · Mainnet</li>
-                    <li>Sync any source you use (Spotify, ChatGPT, GitHub, …)</li>
+                    <li>Sync any listed source you already use</li>
                     <li>Come back, pick that source, tap <b>Connect with Vana</b></li>
                     <li>Approve the request · keep this tab open</li>
                   </ol>
