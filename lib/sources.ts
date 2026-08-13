@@ -21,6 +21,16 @@ export type DnaSourceConfig = {
 /** Live Vana sources DNA can request. One source per access request. */
 export const DNA_SOURCES: DnaSourceConfig[] = [
   {
+    id: "spotify",
+    source: "spotify",
+    scopes: ["spotify.savedTracks"],
+    name: "Spotify",
+    signal: "What moves you",
+    mark: "SP",
+    color: "#ff795f",
+    blurb: "Start here. Approve saved tracks once. Aggregate taste only.",
+  },
+  {
     id: "chatgpt",
     source: "chatgpt",
     scopes: ["chatgpt.memories"],
@@ -29,16 +39,6 @@ export const DNA_SOURCES: DnaSourceConfig[] = [
     mark: "AI",
     color: "#c9ff69",
     blurb: "Approve memories once. DNA keeps thinking patterns only.",
-  },
-  {
-    id: "spotify",
-    source: "spotify",
-    scopes: ["spotify.savedTracks"],
-    name: "Spotify",
-    signal: "What moves you",
-    mark: "SP",
-    color: "#ff795f",
-    blurb: "Approve saved tracks once. Aggregate taste only.",
   },
   {
     id: "youtube",

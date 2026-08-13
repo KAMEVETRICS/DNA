@@ -10,6 +10,7 @@ type VanaSourceConnectProps = {
   source: DnaSourceConfig;
   connected: boolean;
   busy?: boolean;
+  emphasis?: "default" | "hero";
   onBusyChange?: (sourceId: string | null) => void;
   onConnected: (signal: SourceDnaSignal) => void;
 };
@@ -33,6 +34,7 @@ export function VanaSourceConnect({
   source,
   connected,
   busy = false,
+  emphasis = "default",
   onBusyChange,
   onConnected,
 }: VanaSourceConnectProps) {
@@ -80,9 +82,9 @@ export function VanaSourceConnect({
   }
 
   const label = {
-    idle: `Connect ${source.name}`,
+    idle: emphasis === "hero" ? `Connect ${source.name} with Vana` : `Connect ${source.name}`,
     creating: "Creating request…",
-    awaiting_approval: "Waiting for approval…",
+    awaiting_approval: "Approve in the Vana tab…",
     reading: "Reading approved data…",
     done: `${source.name} verified ✓`,
     error: "Try again",
@@ -98,7 +100,7 @@ export function VanaSourceConnect({
   const blocked = busy && !running;
 
   return (
-    <div className={`vana-inline vana-${connect.state.type}`} aria-live="polite">
+    <div className={`vana-inline vana-${connect.state.type} ${emphasis === "hero" ? "vana-hero" : ""}`} aria-live="polite">
       <button type="button" onClick={handleClick} disabled={running || blocked}>
         {blocked ? "Wait…" : label}
         <i aria-hidden="true">↗</i>
