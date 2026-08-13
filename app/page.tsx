@@ -15,7 +15,6 @@ import {
 import { DNA_SOURCES, type DnaSourceId } from "@/lib/sources";
 
 const PROFILE_KEY = "dna.verified.profile.v1";
-const START_SOURCE = DNA_SOURCES[0];
 
 function loadStoredProfile(): DnaProfile | null {
   if (typeof window === "undefined") return null;
@@ -58,10 +57,13 @@ export default function Home() {
   const [peerProfile] = useState<DnaProfile | null>(() => loadPeerFromUrl());
   const [copied, setCopied] = useState(false);
   const [busySource, setBusySource] = useState<string | null>(null);
+  const [pickedId, setPickedId] = useState<DnaSourceId>(DNA_SOURCES[0].id);
 
   const connectedCount = Object.keys(signals).length;
   const remainingSources = DNA_SOURCES.filter((source) => !signals[source.id]);
   const nextSource = remainingSources[0] ?? null;
+  const pickedSource =
+    remainingSources.find((source) => source.id === pickedId) ?? remainingSources[0] ?? DNA_SOURCES[0];
   const invitedDone = Boolean(copied);
   const matched = Boolean(profile && peerProfile);
   const compatibility = useMemo(() => {
@@ -70,7 +72,7 @@ export default function Home() {
   }, [profile, peerProfile]);
 
   const nextAction = !connectedCount
-    ? { id: "connect", label: `Connect ${START_SOURCE.name}`, href: "#start" }
+    ? { id: "connect", label: "Connect any source", href: "#start" }
     : remainingSources.length
       ? { id: "more", label: `Connect ${nextSource?.name ?? "another source"}`, href: "#build" }
       : !matched
@@ -129,7 +131,7 @@ export default function Home() {
             <span>
               {connectedCount
                 ? "Your match is live below — connect more sources to refine it."
-                : `Connect ${START_SOURCE.name} so you can compare with ${peerProfile.archetype}.`}
+                : `Connect any live source so you can compare with ${peerProfile.archetype}.`}
             </span>
             <a href={connectedCount ? "#match" : "#start"}>{connectedCount ? "See match" : "Connect now"}</a>
           </div>
@@ -177,15 +179,15 @@ export default function Home() {
             <span>START HERE · MAINNET</span>
             <span>1 of 3</span>
           </div>
-          <h2>Approve {START_SOURCE.name} with Vana</h2>
+          <h2>Approve any source with Vana</h2>
           <p>
-            Sync {START_SOURCE.name} in the{" "}
+            Pick whichever source you already synced in the{" "}
             <a href="https://app.vana.org/sources" target="_blank" rel="noreferrer">Vana app</a>{" "}
-            on <b>Mainnet</b>, then tap connect. DNA never keeps raw tracks.
+            on <b>Mainnet</b>. Spotify is not required — any listed source scores a first-read.
           </p>
-          {signals[START_SOURCE.id] ? (
+          {connectedCount ? (
             <div className="start-done">
-              <b>{START_SOURCE.name} verified</b>
+              <b>{connectedCount} source{connectedCount === 1 ? "" : "s"} verified</b>
               <span>Now connect another source or copy your invite.</span>
               <div className="start-done-actions">
                 {nextSource ? <a className="primary-button" href={`#source-${nextSource.id}`}>Connect {nextSource.name} <span>↓</span></a> : null}
@@ -196,16 +198,32 @@ export default function Home() {
             </div>
           ) : (
             <>
+              <div className="source-picker" role="radiogroup" aria-label="Choose a source to connect">
+                {DNA_SOURCES.map((source) => (
+                  <button
+                    key={source.id}
+                    type="button"
+                    role="radio"
+                    aria-checked={pickedSource.id === source.id}
+                    className={pickedSource.id === source.id ? "picked" : ""}
+                    onClick={() => setPickedId(source.id)}
+                  >
+                    <i style={{ background: source.color }}>{source.mark}</i>
+                    {source.name}
+                  </button>
+                ))}
+              </div>
+              <p className="picked-blurb">{pickedSource.blurb}</p>
               <VanaSourceConnect
-                source={START_SOURCE}
+                source={pickedSource}
                 connected={false}
                 emphasis="hero"
-                busy={busySource !== null && busySource !== START_SOURCE.id}
+                busy={busySource !== null && busySource !== pickedSource.id}
                 onBusyChange={setBusySource}
                 onConnected={handleSourceConnected}
               />
               <p className="start-help">
-                Popup blocked? Use the approval link that appears. Keep this tab open while you approve.
+                Sync that source on Mainnet first. Popup blocked? Use the approval link. Keep this tab open.
               </p>
             </>
           )}
@@ -242,10 +260,10 @@ export default function Home() {
                 <span>{connectedCount}/{DNA_SOURCES.length} CONNECTED</span>
               </div>
               <div className="source-list">
-                {DNA_SOURCES.map((source, index) => {
+                {DNA_SOURCES.map((source) => {
                   const signal = signals[source.id];
                   const connected = Boolean(signal);
-                  const featured = !connected && source.id === (nextSource?.id ?? START_SOURCE.id);
+                  const featured = !connected && source.id === (nextSource?.id ?? pickedSource.id);
                   return (
                     <div
                       className={`source-row static ${connected ? "connected active" : ""} ${featured ? "featured" : ""}`}
@@ -256,7 +274,7 @@ export default function Home() {
                       <span className="source-name">
                         <b>
                           {source.name}
-                          {featured ? <em className="now-tag">{index === 0 ? "Start here" : "Do this next"}</em> : null}
+                          {featured ? <em className="now-tag">{connectedCount ? "Do this next" : "Ready"}</em> : null}
                         </b>
                         <small>
                           {connected
@@ -289,7 +307,7 @@ export default function Home() {
                 <span>●</span>
                 {connectedCount
                   ? ` ${connectedCount} verified · connect ${Math.max(0, 2 - connectedCount)} more to finish the loop`
-                  : " First connect is the whole test. Start with Spotify."}
+                  : " First connect is the whole test. Any source works."}
               </p>
             </div>
 
@@ -343,8 +361,8 @@ export default function Home() {
                   <h3>Nothing happens until you approve a source.</h3>
                   <ol>
                     <li>Open <a href="https://app.vana.org/sources" target="_blank" rel="noreferrer">app.vana.org/sources</a> · Mainnet</li>
-                    <li>Sync Spotify (or any listed source)</li>
-                    <li>Come back and tap <b>Connect {START_SOURCE.name} with Vana</b></li>
+                    <li>Sync any source you use (Spotify, ChatGPT, GitHub, …)</li>
+                    <li>Come back, pick that source, tap <b>Connect with Vana</b></li>
                     <li>Approve the request · keep this tab open</li>
                   </ol>
                   <a className="primary-button" href="#start">Go to Connect <span>↑</span></a>

@@ -28,7 +28,7 @@ export const DNA_SOURCES: DnaSourceConfig[] = [
     signal: "What moves you",
     mark: "SP",
     color: "#ff795f",
-    blurb: "Start here. Approve saved tracks once. Aggregate taste only.",
+    blurb: "Approve saved tracks once. Aggregate taste only.",
   },
   {
     id: "chatgpt",
