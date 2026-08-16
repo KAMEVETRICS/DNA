@@ -1,6 +1,7 @@
 "use client";
 
-import { useCallback, useMemo, useState, type CSSProperties } from "react";
+import { Suspense, useCallback, useMemo, useState, type CSSProperties } from "react";
+import { useSearchParams } from "next/navigation";
 
 import { VanaSourceConnect } from "@/app/components/VanaSourceConnect";
 import {
@@ -12,6 +13,7 @@ import {
   type DnaProfile,
   type SourceDnaSignal,
 } from "@/lib/dna-profile";
+import { getEntryCampaign, type EntryCampaign } from "@/lib/entry-campaigns";
 import { DNA_SOURCES, type DnaSourceId } from "@/lib/sources";
 
 const PROFILE_KEY = "dna.verified.profile.v1";
@@ -50,6 +52,19 @@ function saveProfile(profile: DnaProfile) {
 }
 
 export default function Home() {
+  return (
+    <Suspense fallback={<HomeContent entryCampaign={null} />}>
+      <HomeFromSearchParams />
+    </Suspense>
+  );
+}
+
+function HomeFromSearchParams() {
+  const searchParams = useSearchParams();
+  return <HomeContent entryCampaign={getEntryCampaign(searchParams.get("entry"))} />;
+}
+
+function HomeContent({ entryCampaign }: { entryCampaign: EntryCampaign | null }) {
   const [profile, setProfile] = useState<DnaProfile | null>(() => loadStoredProfile());
   const [signals, setSignals] = useState<Partial<Record<DnaSourceId, SourceDnaSignal>>>(() =>
     signalsFromProfile(loadStoredProfile()),
@@ -106,6 +121,12 @@ export default function Home() {
   const scores = activeProfile?.scores;
   const archetype = activeProfile?.archetype;
   const average = activeProfile?.average ?? 0;
+  const campaignSource = entryCampaign ? DNA_SOURCES.find((source) => source.id === entryCampaign.sourceId) : null;
+
+  function chooseCampaignSource() {
+    if (!campaignSource) return;
+    setPickedId(campaignSource.id);
+  }
 
   return (
     <main>
@@ -196,6 +217,18 @@ export default function Home() {
             </div>
           ) : (
             <>
+              {entryCampaign && campaignSource ? (
+                <div className="campaign-notice" style={{ "--campaign": campaignSource.color } as CSSProperties}>
+                  <div>
+                    <span>{entryCampaign.label.toUpperCase()} PATH</span>
+                    <strong>You came here for {campaignSource.name}.</strong>
+                    <p>{entryCampaign.promise} Nothing is connected until you choose and approve it.</p>
+                  </div>
+                  <button type="button" onClick={chooseCampaignSource}>
+                    Choose {campaignSource.name} <i aria-hidden="true">↓</i>
+                  </button>
+                </div>
+              ) : null}
               <div className="source-picker" role="radiogroup" aria-label="Choose a source to connect">
                 {DNA_SOURCES.map((source) => (
                   <button
