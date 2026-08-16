@@ -203,6 +203,19 @@ Privacy: raw history not shown or retained by DNA; aggregates + evidence strings
 
 ---
 
-## 9. One-line summary
+## 9. Daily check-in (traction)
 
-**DNA went from a Moksha Spotify prototype with mock multi-source UI to a mainnet multi-source Vana app that steers testers through connect → more sources → invite/match, with listing assets and Cup-aligned scoring paths.**
+Client-side daily sign-in (`lib/daily-checkin.ts`, `DailyCheckin` component):
+
+- One claim per local calendar day  
+- Streak + total days in `localStorage`  
+- Does **not** re-hit Vana escrow or invent Goals  
+- After claim, mission CTA points at connect / another source / invite / match based on progress  
+
+Cup Goals still only come from **first-reads**. Daily check-in is for retention and routing people into those actions.
+
+---
+
+## 10. One-line summary
+
+**DNA went from a Moksha Spotify prototype with mock multi-source UI to a mainnet multi-source Vana app that steers testers through connect → more sources → invite/match, with listing assets, daily check-in for retention, and Cup-aligned scoring paths.**

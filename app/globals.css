@@ -71,6 +71,31 @@ h1 em, h2 em { font-family: Georgia, "Times New Roman", serif; font-weight: 400;
 .signal-one { top: 82px; left: 18px; transform: rotate(-6deg); }.signal-two { right: 3px; top: 155px; transform: rotate(7deg); }.signal-two span { background: var(--coral); }.signal-three { bottom: 88px; left: 8px; transform: rotate(3deg); }.signal-three span { background: var(--blue); }
 .hero-note { position: absolute; right: 2px; bottom: 35px; font: 11px/1.45 "Courier New", monospace; text-transform: uppercase; transform: rotate(-4deg); }
 
+.daily-shell { padding-block: 22px 0; }
+.daily-checkin { border: 1px solid var(--ink); background: white; padding: 20px 22px; box-shadow: 10px 10px 0 var(--ink); }
+.daily-checkin.open { border-color: var(--coral); box-shadow: 10px 10px 0 var(--coral); }
+.daily-checkin.claimed { border-color: var(--ink); box-shadow: 10px 10px 0 var(--acid); }
+.daily-checkin-top { display: grid; grid-template-columns: 1.4fr auto; gap: 20px; align-items: start; }
+.daily-kicker { display: block; margin-bottom: 8px; font: 800 9px/1 "Courier New", monospace; letter-spacing: .1em; color: rgba(22,22,19,.5); }
+.daily-checkin h2 { margin: 0 0 8px; font-size: clamp(22px, 2.6vw, 30px); letter-spacing: -.03em; line-height: 1; }
+.daily-checkin-top p { margin: 0; max-width: 560px; color: rgba(22,22,19,.62); font-size: 13px; line-height: 1.5; }
+.daily-stats { display: flex; gap: 10px; }
+.daily-stats > div { min-width: 78px; padding: 12px 10px; border: 1px solid var(--ink); background: var(--paper); text-align: center; }
+.daily-stats b { display: block; font: 400 28px/1 Georgia, serif; }
+.daily-stats small { display: block; margin-top: 6px; font: 800 8px/1 "Courier New", monospace; text-transform: uppercase; color: rgba(22,22,19,.5); }
+.daily-claim-row { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 12px; margin-top: 16px; padding-top: 14px; border-top: 1px solid var(--line); }
+.daily-claim-row p { margin: 0; font-size: 13px; color: rgba(22,22,19,.7); max-width: 420px; }
+.daily-claim-button { display: inline-flex; align-items: center; gap: 10px; border: 1px solid var(--ink); background: var(--ink); color: white; padding: 13px 16px; font: 800 11px/1 "Courier New", monospace; text-transform: uppercase; cursor: pointer; }
+.daily-claim-button i { color: var(--acid); font-style: normal; }
+.daily-claim-button:hover { background: var(--coral); border-color: var(--coral); color: var(--ink); }
+.daily-claim-button:hover i { color: var(--ink); }
+.daily-claimed { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 14px; margin-top: 16px; padding: 14px; border: 1px solid var(--ink); background: var(--acid); }
+.daily-claimed strong { display: block; font-size: 14px; }
+.daily-claimed span { display: block; margin-top: 4px; font-weight: 700; font-size: 13px; }
+.daily-claimed p { margin: 6px 0 0; color: rgba(22,22,19,.68); font-size: 12px; line-height: 1.45; max-width: 460px; }
+.daily-claimed button { display: inline-flex; align-items: center; gap: 8px; border: 1px solid var(--ink); background: var(--ink); color: white; padding: 11px 13px; font: 800 9px/1 "Courier New", monospace; text-transform: uppercase; cursor: pointer; }
+.daily-claimed button i { color: var(--acid); font-style: normal; }
+
 .invite-banner { background: var(--ink); color: white; border-bottom: 3px solid var(--acid); }
 .invite-banner-inner { display: flex; align-items: center; justify-content: space-between; gap: 18px; padding: 14px 0; flex-wrap: wrap; }
 .invite-banner b { font-size: 13px; }
@@ -307,6 +332,11 @@ h1 em, h2 em { font-family: Georgia, "Times New Roman", serif; font-weight: 400;
   .entry-hero { grid-template-columns: 1fr; min-height: auto; padding-block: 62px 76px; }.entry-signal-card { width: min(100%, 520px); margin-inline: auto; }
   .invite-banner-inner { align-items: flex-start; }
   .dock-steps { display: none; }
+  .daily-checkin-top { grid-template-columns: 1fr; }
+  .daily-stats { width: 100%; }
+  .daily-stats > div { flex: 1; }
+  .daily-claim-row { align-items: stretch; }
+  .daily-claim-button, .daily-claimed button { width: 100%; justify-content: space-between; }
   .builder-heading > p { max-width: 620px; }
   .privacy-seal { margin-inline: auto; }
   .how-copy { padding-top: 0; }

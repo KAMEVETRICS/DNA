@@ -3,6 +3,7 @@
 import { Suspense, useCallback, useMemo, useState, type CSSProperties } from "react";
 import { useSearchParams } from "next/navigation";
 
+import { DailyCheckin } from "@/app/components/DailyCheckin";
 import { VanaSourceConnect } from "@/app/components/VanaSourceConnect";
 import {
   computeCompatibility,
@@ -136,6 +137,7 @@ function HomeContent({ entryCampaign }: { entryCampaign: EntryCampaign | null })
           <span>DNA</span>
         </a>
         <div className="nav-links">
+          <a href="#daily">Daily</a>
           <a href="#start">1. Connect</a>
           <a href="#invite">2. Invite</a>
           <a href="#match">3. Match</a>
@@ -156,6 +158,18 @@ function HomeContent({ entryCampaign }: { entryCampaign: EntryCampaign | null })
           </div>
         </div>
       ) : null}
+
+      <div className="shell daily-shell">
+        <DailyCheckin
+          connectedCount={connectedCount}
+          remainingSources={remainingSources.length}
+          hasProfile={Boolean(profile)}
+          matched={matched}
+          onInvite={() => {
+            void copyInvite();
+          }}
+        />
+      </div>
 
       <section className="hero hero-action shell" id="top">
         <div className="hero-copy">
